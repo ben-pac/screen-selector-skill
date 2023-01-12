@@ -1,4 +1,5 @@
 import json
+import os.path
 
 from mycroft import MycroftSkill, intent_file_handler
 
@@ -18,7 +19,7 @@ class ScreenSelector(MycroftSkill):
             }
         )
         self._config = {}
-        with open("/home/benpac/epaperdisplay/config/config.json") as f:
+        with open(os.path.expanduser("~/.config/epaperdisplay/config.json")) as f:
             self._config = json.load(f)
 
     @intent_file_handler("selector.screen.intent")
