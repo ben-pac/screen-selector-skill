@@ -11,16 +11,17 @@ DEBUG = True
 class ScreenSelector(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
-        self._display = epd.DisplayManager.from_config(
-            {
-                "debug": True,
-                "model": "SevenInchFiveHD",
-                "debug_screen_path": "/home/benpac/mycroft_screen.png",
-            }
-        )
         self._config = {}
         with open(os.path.expanduser("~/.config/epaperdisplay/config.json")) as f:
             self._config = json.load(f)
+        self._display = epd.DisplayManager.from_config(
+            self._config.get(
+                "display",
+                {
+                    "model": "SevenInchFiveHD",
+                },
+            )
+        )
 
     @intent_file_handler("selector.screen.intent")
     def handle_selector_screen(self, message):
