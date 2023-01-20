@@ -43,21 +43,20 @@ class ScreenSelector(MycroftSkill):
     @intent_handler("selector.screen.intent")
     def handle_selector_screen(self, message):
         screen_name = message.data.get("screen_name")
-
         if "calendar" in screen_name:
             screen = epd.CalendarScreen()
-            service = (epd.GoogleCalendarService(config=self._config["calendar"]),)
+            service = epd.GoogleCalendarService(config=self._config["calendar"])
         elif "quote" in screen_name:
             screen = epd.QuoteScreen()
             service = epd.QuotableService({})
         elif "countdown" in screen_name:
             screen = epd.CountdownScreen()
-            service = (
-                epd.CountdownFromConfigurationService(config=self._config["countdown"]),
+            service = epd.CountdownFromConfigurationService(
+                config=self._config["countdown"]
             )
         elif "weather" in screen_name:
             screen = epd.WeatherScreen()
-            service = (epd.SrfWeatherService(config=self._config["weather"]),)
+            service = epd.SrfWeatherService(config=self._config["weather"])
         else:
             self.speak_dialog("not.found", data={"screen_name": screen_name})
             return
