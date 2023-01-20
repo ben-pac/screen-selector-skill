@@ -36,6 +36,7 @@ class ScreenSelector(MycroftSkill):
     def handle_read_quote(self, message):
         service = epd.QuotableService({})
         quote = service.get_quote()
+        self._display.display(epd.QuoteScreen().create_image(self._display.size, service))
         self.speak(quote.text)
         time.sleep(0.5)
         self.speak(quote.author)
