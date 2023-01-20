@@ -1,7 +1,8 @@
 import json
 import os.path
+import time
 
-from mycroft import MycroftSkill, intent_file_handler
+from mycroft import MycroftSkill, intent_handler
 
 import epaper_display as epd
 
@@ -23,7 +24,23 @@ class ScreenSelector(MycroftSkill):
             )
         )
 
-    @intent_file_handler("selector.screen.intent")
+    @intent_handler("new.quote.intent")
+    def handle_new_quote(self, message):
+        service = epd.QuotableService({})
+        service.get_quote(force_new=True)
+        self._display.display(
+            epd.QuoteScreen().create_image(self._display.size, service)
+        )
+
+    @intent_handler("read.quote.intent")
+    def handle_read_quote(self, message):
+        service = epd.QuotableService({})
+        quote = service.get_quote()
+        self.speak(quote.text)
+        time.sleep(0.5)
+        self.speak(quote.author)
+
+    @intent_handler("selector.screen.intent")
     def handle_selector_screen(self, message):
         screen_name = message.data.get("screen_name")
 
