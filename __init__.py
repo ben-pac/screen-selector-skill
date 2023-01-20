@@ -61,7 +61,7 @@ class ScreenSelector(MycroftSkill):
             self.speak_dialog("not.found", data={"screen_name": screen_name})
             return
         self.speak_dialog("selector.screen", data={"screen_name": screen_name})
-        screen.create_image(self._display.size, service)
+        self._display.display(screen.create_image(self._display.size, service))
 
 
 def create_skill():
