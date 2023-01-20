@@ -45,39 +45,24 @@ class ScreenSelector(MycroftSkill):
         screen_name = message.data.get("screen_name")
 
         if "calendar" in screen_name:
-            self._display.display(
-                epd.CalendarScreen().create_image(
-                    self._display.size,
-                    epd.GoogleCalendarService(config=self._config["calendar"]),
-                )
-            )
+            screen = epd.CalendarScreen()
+            service = (epd.GoogleCalendarService(config=self._config["calendar"]),)
         elif "quote" in screen_name:
-            self._display.display(
-                epd.QuoteScreen().create_image(
-                    self._display.size, epd.QuotableService({})
-                )
-            )
+            screen = epd.QuoteScreen()
+            service = epd.QuotableService({})
         elif "countdown" in screen_name:
-            self._display.display(
-                epd.CountdownScreen().create_image(
-                    self._display.size,
-                    epd.CountdownFromConfigurationService(
-                        config=self._config["countdown"]
-                    ),
-                )
+            screen = epd.CountdownScreen()
+            service = (
+                epd.CountdownFromConfigurationService(config=self._config["countdown"]),
             )
         elif "weather" in screen_name:
-            self._display.display(
-                epd.WeatherScreen().create_image(
-                    self._display.size,
-                    epd.SrfWeatherService(config=self._config["weather"]),
-                )
-            )
+            screen = epd.WeatherScreen()
+            service = (epd.SrfWeatherService(config=self._config["weather"]),)
         else:
             self.speak_dialog("not.found", data={"screen_name": screen_name})
             return
-
         self.speak_dialog("selector.screen", data={"screen_name": screen_name})
+        screen.create_image(self._display.size, service)
 
 
 def create_skill():
